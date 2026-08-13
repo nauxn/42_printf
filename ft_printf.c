@@ -12,11 +12,27 @@
 
 #include "ft_printf.h"
 
-int	ft_printf(const char *str, ...)
-{
-	va_list	args;
+static t_func_table	jump_table[256] = {NULL};
 
-	va_start(args, str);
+void	init_jump_table(void)
+{
+	jump_table['c'] = ft_putchar_f;
+	jump_table['s'] = ft_putstr_f;
+	jump_table['p'] = ft_puthex_p;
+	jump_table['d'] = ft_putnbr_f;
+	jump_table['i'] = ft_putnbr_f;
+	jump_table['u'] = ft_putunbr_f;
+	jump_table['x'] = ft_puthex_f;
+	jump_table['X'] = ft_puthex_f;
+	jump_table['%'] = ft_putsign_f;
 }
 
 
+int	ft_printf(const char *str, ...)
+{
+	va_list	args;
+	int		total_len;
+
+	va_start(args, str);
+	
+}

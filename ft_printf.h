@@ -17,6 +17,8 @@
 # include <unistd.h>
 # include <stdarg.h>
 
+typedef int (*t_func_table)(va_list);
+
 int	ft_printf(const char *, ...);
 
 #endif
