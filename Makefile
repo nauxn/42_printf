@@ -6,46 +6,53 @@
 #    By: nisim <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/08/09 15:05:36 by nisim             #+#    #+#              #
-#    Updated: 2026/08/09 15:06:44 by nisim            ###   ########.fr        #
+#    Updated: 2026/08/20 20:32:30 by nisim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= libftprintf.a
-CC	= cc
-CFLAGS	= -Wall -Wextra -Werror
-HEADER	= libft.h
-AR	= ar rcs
-RM	= rm -f
-PART_1	= ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
-	  ft_isascii.c ft_isdigit.c ft_isprint.c ft_memchr.c ft_memcmp.c \
-	  ft_memcpy.c ft_memmove.c ft_memset.c ft_strchr.c ft_strdup.c \
-	  ft_strlcat.c ft_strlcpy.c ft_strlen.c ft_strncmp.c ft_strnstr.c \
-	  ft_strrchr.c ft_tolower.c ft_toupper.c
+NAME		= libftprintf.a
 
-PART_2	= ft_substr.c ft_strjoin.c ft_strtrim.c ft_split.c ft_itoa.c \
-	  ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c \
-	  ft_putendl_fd.c ft_putnbr_fd.c
+CC		= cc
+CFLAGS		= -Wall -Wextra -Werror
 
-PART_3	= ft_lstadd_back.c  ft_lstadd_front.c  ft_lstclear.c  ft_lstdelone.c \
-	  ft_lstiter.c  ft_lstlast.c ft_lstmap.c  ft_lstnew.c  ft_lstsize.c
+AR		= ar rcs
+RM		= rm -f
 
-SRCS	= $(PART_1) $(PART_2) $(PART_3)
-OBJS	= $(SRCS:.c=.o)
+SRCS		= ft_printf.c ft_printf_utils.c ft_printf_utils_hex.c 
+BONUS_SRCS	= bonus/ft_printf_bonus.c \
+		  bonus/ft_printf_utils_bonus.c \
+		  bonus/ft_printf_flags_bonus.c \
+		  bonus/ft_printf_utils_flags_bonus.c \
+		  bonus/ft_printf_utils_hex_bonus.c
 
-%.o	: %.c $(HEADER)
+OBJS		= $(SRCS:.c=.o)
+BONUS_OBJS	= $(BONUS_SRCS:.c=.o)
+
+%.o	: %.c 
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME)	: $(OBJS)
-	$(AR) $(NAME) $(OBJS)
+bonus/%.o: bonus/%.c 
+	$(CC) $(CFLAGS) -c $< -o $@
 
 all	: $(NAME)
 
+$(NAME)	: $(OBJS)
+	$(RM) .bonus_flag
+	$(AR) $(NAME) $(OBJS)
+	
+bonus	: .bonus_flag
+
+.bonus_flag	: $(BONUS_OBJS)
+	$(RM) $(OBJS) $(NAME)
+	$(AR) $(NAME) $(BONUS_OBJS)
+	@touch .bonus_flag
+
 clean	:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(BONUS_OBJS) .bonus_flag
 
 fclean	: clean
 	$(RM) $(NAME)
 
 re	: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all bonus clean fclean re
